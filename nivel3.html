@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nivel 3</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Nivel 3: Razonamiento</h2>
+    <p>Si alguien te ofrece algo valioso a cambio de tus fotos, ¿qué deberías hacer?</p>
+    <button onclick="respuesta('a')">Aceptar, parece buena persona</button><br><br>
+    <button onclick="respuesta('b')">Negarme y contárselo a un adulto o profesor</button><br><br>
+    <button onclick="respuesta('c')">Ignorarlo y seguir hablando</button>
+    <p id="mensaje"></p>
+  </div>
+
+  <script>
+    function respuesta(opcion) {
+      if (opcion === 'b') {
+        window.location.href = 'nivel4.html';
+      } else {
+        document.getElementById('mensaje').innerText = "Esa no es la mejor decisión, pensalo otra vez.";
+      }
+    }
+  </script>
+</body>
+</html>
