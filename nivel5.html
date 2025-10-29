@@ -20,16 +20,20 @@
   document.getElementById('codigo').innerText = codigo;
 
   // Enviar datos a la hoja
-  fetch("https://script.google.com/macros/s/AKfycbxesqkmQo9v7M7DfqjNIjSlX_dpSxhetjifxIU-ueVhV0Ih6DyzIfJC-_NArJ9xhAue/exec", {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      nombre: jugador.nombre,
-      curso: jugador.curso,
-      codigo: codigo
-    })
-  });
-</script>
+  fetch("https://script.google.com/macros/s/AKfycbyR4PAifdKUDXzVrzxtlk4WIddAnGZrZg0xx4AcQ1EvLyljob4AzqjnptX2v84fwz57/exec", {
+  method: "POST",
+  mode: "no-cors",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    nombre: jugador.nombre,
+    curso: jugador.curso,
+    codigo: codigo
+  })
+}).then(() => {
+  // Espera 3 segundos y redirige al nivel 6
+  setTimeout(() => {
+    window.location.href = "nivel6.html";
+  }, 3000);
+});
