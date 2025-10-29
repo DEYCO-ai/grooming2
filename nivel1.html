@@ -9,7 +9,7 @@
 <body>
   <div class="container">
     <h2>Nivel 1: El mensaje oculto</h2>
-    <p>Ho jurrplqj hv ho dfrvr vhaxdo d phqruhv sru lqwhuqhw. Orv djuhvruhv ilqjhq vhu dpljrv sdud pdqlsxodu b hqjdqdu d odv ylfwlpdv. Hv xq gholwr judyh b uhtxlhuh hgxfdflrq b suhyhqflrq.:</p>
+    <p>Ho jurrplqj hv ho dfrvr vhaxdo d phqruhv sru lqwhuqhw:</p>
     <p class="puzzle">pista: cidrado cesar 3 desplazamientos (26 letras).</p>
     <input type="text" id="respuesta" placeholder="Escribí tu respuesta">
     <button onclick="verificar()">Enviar</button>
@@ -19,7 +19,7 @@
   <script>
     function verificar() {
       const r = document.getElementById('respuesta').value.toLowerCase().trim();
-      if (r === "El grooming es el acoso sexual a menores por internet. Los agresores fingen ser amigos para manipular y enganar a las victimas. Es un delito grave y requiere educacion y prevencion.") {
+      if (r === "El grooming es el acoso sexual a menores por internet") {
         window.location.href = 'nivel2.html';
       } else {
         document.getElementById('error').innerText = "Incorrecto, intentá de nuevo.";
