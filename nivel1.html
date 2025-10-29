@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nivel 1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Nivel 1: El mensaje oculto</h2>
+    <p>Descifra el siguiente texto (usa un cifrado César con desplazamiento de 3):</p>
+    <p class="puzzle">Jurrplqj hv srlhgvr, shur hv djxd gr vdejdugr.</p>
+    <input type="text" id="respuesta" placeholder="Escribí tu respuesta">
+    <button onclick="verificar()">Enviar</button>
+    <p id="error"></p>
+  </div>
+
+  <script>
+    function verificar() {
+      const r = document.getElementById('respuesta').value.toLowerCase().trim();
+      if (r === "grooming es peligroso pero es algo de saberlo") {
+        window.location.href = 'nivel2.html';
+      } else {
+        document.getElementById('error').innerText = "Incorrecto, intentá de nuevo.";
+      }
+    }
+  </script>
+</body>
+</html>
