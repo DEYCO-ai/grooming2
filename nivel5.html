@@ -15,9 +15,21 @@
   </div>
 
   <script>
-    const jugador = JSON.parse(localStorage.getItem('jugador')) || { nombre: 'Jugador', curso: '' };
-    const codigo = "SAFE-" + jugador.nombre.toUpperCase().substring(0,3) + "-42";
-    document.getElementById('codigo').innerText = codigo;
-  </script>
-</body>
-</html>
+  const jugador = JSON.parse(localStorage.getItem('jugador')) || { nombre: 'Jugador', curso: '' };
+  const codigo = "SAFE-" + jugador.nombre.toUpperCase().substring(0,3) + "-42";
+  document.getElementById('codigo').innerText = codigo;
+
+  // Enviar datos a la hoja
+  fetch("https://script.google.com/macros/s/AKfycbxesqkmQo9v7M7DfqjNIjSlX_dpSxhetjifxIU-ueVhV0Ih6DyzIfJC-_NArJ9xhAue/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      nombre: jugador.nombre,
+      curso: jugador.curso,
+      codigo: codigo
+    })
+  });
+</script>
