@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nivel 5</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>¡Felicidades!</h2>
+    <p>Completaste todos los niveles. Demostraste que sabés cómo cuidarte en internet.</p>
+    <p>Mostrá este código a tu profesor para reclamar tu recompensa:</p>
+    <h3 id="codigo"></h3>
+  </div>
+
+  <script>
+    const jugador = JSON.parse(localStorage.getItem('jugador')) || { nombre: 'Jugador', curso: '' };
+    const codigo = "SAFE-" + jugador.nombre.toUpperCase().substring(0,3) + "-42";
+    document.getElementById('codigo').innerText = codigo;
+  </script>
+</body>
+</html>
