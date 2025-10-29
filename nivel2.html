@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nivel 2</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .oculto {
+      color: black;
+    }
+    .oculto:hover {
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Nivel 2: La pista escondida</h2>
+    <p>Mové el mouse sobre el texto para descubrir la palabra clave:</p>
+    <p class="oculto">********* confianza *********</p>
+    <input type="text" id="respuesta" placeholder="Palabra clave">
+    <button onclick="verificar()">Enviar</button>
+    <p id="error"></p>
+  </div>
+
+  <script>
+    function verificar() {
+      const r = document.getElementById('respuesta').value.toLowerCase().trim();
+      if (r === "confianza") {
+        window.location.href = 'nivel3.html';
+      } else {
+        document.getElementById('error').innerText = "No es correcto.";
+      }
+    }
+  </script>
+</body>
+</html>
