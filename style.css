@@ -1,1 +1,68 @@
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background: url('fondo.png.png') no-repeat center center/cover;
+  font-family: 'Cinzel', serif;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+}
 
+.container {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  width: 90%;
+  max-width: 400px;
+}
+
+h1 {
+  font-size: 2.5em;
+  letter-spacing: 4px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 0.9em;
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+input {
+  width: 80%;
+  padding: 10px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+}
+
+button {
+  background-color: #222;
+  color: white;
+  padding: 10px 20px;
+  border: 1px solid white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: white;
+  color: black;
+}
+
+.aviso {
+  font-size: 0.8em;
+  color: #bbb;
+  margin-top: 5px;
+}
+
+.oculto {
+  display: none;
+}
