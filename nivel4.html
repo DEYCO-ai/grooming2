@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nivel 4</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .chat { text-align: left; margin-top: 15px; }
+    .msg { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Nivel 4: Conversación sospechosa</h2>
+    <div id="chat" class="chat"></div>
+    <button id="continuar">Continuar</button>
+  </div>
+
+  <script>
+    const mensajes = [
+      "Desconocido: Hola, te vi en Insta 😏",
+      "Vos: ¿Quién sos?",
+      "Desconocido: Tengo fotos tuyas, querés verlas?",
+      "Vos: ¿Qué?...",
+      "Desconocido: Pasame una foto tuya primero 😉",
+      "Vos: Esto no está bien. Voy a avisar a un adulto."
+    ];
+
+    let i = 0;
+    const chat = document.getElementById('chat');
+    const btn = document.getElementById('continuar');
+
+    btn.onclick = () => {
+      if (i < mensajes.length) {
+        const msg = document.createElement('p');
+        msg.classList.add('msg');
+        msg.textContent = mensajes[i];
+        chat.appendChild(msg);
+        i++;
+      } else {
+        window.location.href = 'nivel5.html';
+      }
+    };
+  </script>
+</body>
+</html>
