@@ -1,106 +1,128 @@
-@@ -2,67 +2,103 @@
-  margin: 0;
-  padding: 0;
-  height: 100vh;
-  background: url('fondo.png.png') no-repeat center center/cover;
-  font-family: 'Cinzel', serif;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: black;
-  position: relative;
-  overflow: hidden;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nivel 2 – El Perfil Falso</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: url('hollow.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    backdrop-filter: blur(6px) brightness(0.3);
+  }
+
+  .container {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 15px;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+  }
+
+  h2 {
+    color: #fff;
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+  }
+
+  .profile {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: left;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+  }
+
+  .option {
+    display: block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #eee;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .option:hover {
+    background: rgba(255,255,255,0.2);
+  }
+
+  #feedback {
+    margin-top: 15px;
+    font-weight: bold;
+  }
+
+  button {
+    margin-top: 10px;
+    background-color: #222;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #444;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>💬 Nivel 2 – “El perfil falso”</h2>
+    <div class="profile">
+      <p><strong>Usuario:</strong> @Juan_22</p>
+      <p><strong>Descripción:</strong> “Hola 😎, tengo 14 años. Me encanta jugar, seguro nos vimos en la escuela 😁”</p>
+      <p><strong>Detalles:</strong> Solo tiene 3 fotos, todas parecen de alguien mayor. Se unió hace una semana.</p>
+    </div>
+
+    <p><strong>Mensaje recibido:</strong><br>
+    “Podés pasarme una foto tuya? Te paso la mía primero 😉”</p>
+
+    <p><strong>¿Qué harías?</strong></p>
+
+    <div id="opciones">
+      <div class="option" onclick="respuesta(1)">a) Lo agrego igual, parece buena onda.</div>
+      <div class="option" onclick="respuesta(2)">b) Le pregunto a un profe o adulto.</div>
+      <div class="option" onclick="respuesta(3)">c) Le paso mi número para hablar por WhatsApp.</div>
+    </div>
+
+    <p id="feedback"></p>
+    <button id="continuar" style="display:none;" onclick="siguienteNivel()">Continuar</button>
+  </div>
+
+<script>
+function respuesta(opcion) {
+  const feedback = document.getElementById("feedback");
+  const continuar = document.getElementById("continuar");
+
+  if (opcion === 2) {
+    feedback.style.color = "#4ef04e";
+    feedback.textContent = "✅ Correcto. Detectaste un perfil sospechoso. Siempre avisá a un adulto de confianza.";
+    continuar.style.display = "inline-block";
+  } else {
+    feedback.style.color = "#ff4e4e";
+    feedback.textContent = "❌ Incorrecto. Cuidado, podría ser alguien con malas intenciones.";
+  }
 }
 
-/* Fondo más oscuro y nítido */
-body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('fondo.png.png') no-repeat center center/cover;
-  filter: brightness(40%) contrast(120%) saturate(90%);
-  z-index: -2;
+function siguienteNivel() {
+  window.location.href = "nivel3.html";
 }
-
-/* Capa de oscurecimiento adicional */
-body::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at center, rgba(0,0,0,0.7), rgba(0,0,0,0.95));
-  z-index: -1;
-}
-
-.container {
-  text-align: center;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
-  width: 90%;
-  max-width: 400px;
-}
-
-
-.container {
-  text-align: center;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-  width: 90%;
-  max-width: 400px;
-}
-
-h1 {
-  font-size: 2.5em;
-  letter-spacing: 4px;
-  margin-bottom: 10px;
-}
-
-.subtitle {
-  font-size: 0.9em;
-  color: #ccc;
-  margin-bottom: 20px;
-}
-
-input {
-  width: 80%;
-  padding: 10px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 5px;
-  text-align: center;
-}
-
-button {
-  background-color: #222;
-  color: white;
-  padding: 10px 20px;
-  border: 1px solid white;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  background-color: white;
-  color: black;
-}
-
-.aviso {
-  font-size: 0.8em;
-  color: #bbb;
-  margin-top: 5px;
-}
-
-.oculto {
-  display: none;
-}
+</script>
+</body>
+</html>
