@@ -37,9 +37,16 @@
         msg.classList.add('msg');
         msg.textContent = mensajes[i];
         chat.appendChild(msg);
+
+        // Si acabamos de mostrar el último mensaje...
+        if (i === mensajes.length - 1) {
+          btn.textContent = "Avisar a un adulto";
+          btn.onclick = () => {
+            alert("¡Bien hecho! Siempre cuéntales a adultos de confianza cuando alguien te haga sentir incómodo o pida cosas privadas.");
+            window.location.href = 'nivel5.html';
+          };
+        }
         i++;
-      } else {
-        window.location.href = 'nivel5.html';
       }
     };
   </script>
