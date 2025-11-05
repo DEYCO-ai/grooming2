@@ -1,29 +1,177 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nivel 3</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nivel 3 – Ordena y descubre</title>
+  <style>
+    :root{
+      --bg:#0d0d10;
+      --neon:#9d4edd;
+      --accent:#ff0055;
+      --txt:#eee;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      background:var(--bg);
+      color:var(--txt);
+      font-family:Segoe UI, sans-serif;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
+      overflow:hidden;
+    }
+    /* scanlines */
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 3px);
+    }
+    h1{margin-bottom:.5em;font-size:2rem;letter-spacing:.1em;text-transform:uppercase;color:var(--neon)}
+    .wrap{
+      display:grid;
+      grid-template-columns:repeat(4,80px);
+      grid-gap:4px;
+      padding:10px;
+      background:rgba(255,255,255,.05);
+      border-radius:12px;
+      box-shadow:0 0 20px var(--neon);
+      position:relative;
+    }
+    .tile{
+      width:80px;
+      height:80px;
+      background-size:320px 320px;
+      cursor:grab;
+      border-radius:6px;
+      transition:transform .2s;
+    }
+    .tile.dragging{transform:scale(1.05);cursor:grabbing;z-index:10}
+    .tile.correct{box-shadow:0 0 10px 2px var(--neon)}
+    #inputBox{
+      margin-top:2rem;
+      display:none;
+      text-align:center;
+    }
+    #inputBox input{
+      padding:10px 15px;
+      font-size:1.2rem;
+      border:2px solid var(--neon);
+      background:transparent;
+      color:var(--txt);
+      border-radius:8px;
+      outline:none;
+    }
+    #inputBox button{
+      margin-left:10px;
+      padding:10px 20px;
+      border:none;
+      background:var(--accent);
+      color:#fff;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:bold;
+    }
+    #msg{margin-top:1rem;height:1.5rem;color:var(--accent)}
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Nivel 3: Razonamiento</h2>
-    <p>Si alguien te ofrece algo valioso a cambio de tus fotos, ¿qué deberías hacer?</p>
-    <button onclick="respuesta('a')">Aceptar, parece buena persona</button><br><br>
-    <button onclick="respuesta('b')">Negarme y contárselo a un adulto o profesor</button><br><br>
-    <button onclick="respuesta('c')">Ignorarlo y seguir hablando</button>
-    <p id="mensaje"></p>
-  </div>
 
-  <script>
-    function respuesta(opcion) {
-      if (opcion === 'b') {
-        window.location.href = 'nivel4.html';
-      } else {
-        document.getElementById('mensaje').innerText = "Esa no es la mejor decisión, pensalo otra vez.";
-      }
+<h1>Nivel 3: Ordena la imagen y descubre la palabra</h1>
+
+<div id="puzzle" class="wrap"></div>
+
+<div id="inputBox">
+  <p>¿Qué palabra se forma?</p>
+  <input id="palabra" maxlength="5" placeholder="5 letras"/>
+  <button onclick="comprobar()">Enviar</button>
+</div>
+
+<p id="msg"></p>
+
+<script>
+  /* ---------- CONFIG ---------- */
+  const SOLUCIÓN = "GROOM";          // palabra correcta
+  const TAM    = 4;                 // 4×4
+  const TILES  = TAM*TAM;
+  const EMOJI  = "👁️‍🗨️";            // emoji que ocupará toda la cuadrícula
+
+  /* ---------- CREAR FICHAS ---------- */
+  const puzzle = document.getElementById('puzzle');
+  let indices = Array.from({length:TILES},(_,i)=>i);
+
+  // barajar
+  indices.sort(()=>Math.random()-.5);
+
+  indices.forEach((idxReal,i)=>{
+    const tile = document.createElement('div');
+    tile.className = 'tile';
+    tile.draggable = true;
+    tile.dataset.index = i;        // posición actual
+    tile.dataset.real  = idxReal; // posición correcta
+
+    /* pintamos el trozo correspondiente del emoji */
+    const row = Math.floor(idxReal/TAM);
+    const col = idxReal%TAM;
+    tile.style.backgroundImage = `url('data:image/svg+xml,\
+      <svg xmlns="http://www.w3.org/2000/svg" width="320" height="320">\
+      <text x="50%" y="50%" font-size="300" fill="white" text-anchor="middle" dominant-baseline="central">${EMOJI}</text></svg>')`;
+    tile.style.backgroundPosition = `-${col*80}px -${row*80}px`;
+
+    puzzle.appendChild(tile);
+  });
+
+  /* ---------- DRAG & DROP ---------- */
+  let dragged = null;
+  puzzle.addEventListener('dragstart',e=>{
+    dragged = e.target;
+    e.target.classList.add('dragging');
+  });
+  puzzle.addEventListener('dragend',e=>{
+    e.target.classList.remove('dragging');
+  });
+  puzzle.addEventListener('dragover',e=>e.preventDefault());
+  puzzle.addEventListener('drop',e=>{
+    e.preventDefault();
+    if(e.target.classList.contains('tile') && e.target!==dragged){
+      // intercambia posiciones en el DOM
+      const all = [...puzzle.children];
+      const i1 = all.indexOf(dragged);
+      const i2 = all.indexOf(e.target);
+      if(i1<i2) e.target.after(dragged);
+      else e.target.before(dragged);
+      verificar();
     }
-  </script>
+  });
+
+  /* ---------- COMPROBAR ORDEN ---------- */
+  function verificar(){
+    const actuales = [...puzzle.children].map(t=>parseInt(t.dataset.real));
+    const ok = actuales.every((v,i)=>v===i);
+    if(ok){
+      puzzle.querySelectorAll('.tile').forEach(t=>t.classList.add('correct'));
+      setTimeout(()=>{
+        document.getElementById('inputBox').style.display='block';
+        document.getElementById('palabra').focus();
+      },600);
+    }
+  }
+
+  /* ---------- COMPROBAR PALABRA ---------- */
+  function comprobar(){
+    const valor = document.getElementById('palabra').value.trim().toUpperCase();
+    const msg = document.getElementById('msg');
+    if(valor===SOLUCIÓN){
+      msg.textContent="¡Correcto! Pasando al siguiente nivel...";
+      setTimeout(()=>window.location.href='nivel4.html',1500);
+    }else{
+      msg.textContent="Palabra incorrecta, inténtalo de nuevo.";
+    }
+  }
+</script>
 </body>
 </html>
