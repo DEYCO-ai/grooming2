@@ -1,94 +1,117 @@
-/* Fondo general */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Poppins', sans-serif;
-  background: url('fondo.png') no-repeat center center fixed;
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
-  color: #fff;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  overflow: hidden;
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>6ROOM1NG – Roomscape</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* ---------- RESET ---------- */
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:100%}
 
-/* Capa de oscurecimiento (más misteriosa) */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at center, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.95) 100%);
-  backdrop-filter: blur(2px);
-  z-index: -1;
-}
+    /* ---------- COLOR PALETTE ---------- */
+    :root{
+      --ink:#0d0d10;
+      --glow1:#9d4edd;
+      --glow2:#3c096c;
+      --spot:#ff0055;
+    }
 
-/* Caja central */
-.container {
-  background: rgba(0, 0, 0, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
-  box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
-  padding: 25px 20px;
-  max-width: 90%;
-  width: 400px;
-  animation: fadeIn 1s ease-in-out;
-}
+    /* ---------- ROOMSCAPE ---------- */
+    body{
+      background:var(--ink);
+      overflow:hidden;
+      font-family:'Segoe UI',sans-serif;
+      color:#ccc;
+    }
 
-/* Efecto de entrada */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+    /* animated gradient that simulates a distant light-source */
+    .aura{
+      position:absolute;
+      inset:-20%;
+      background:
+        radial-gradient(circle at 30% 70%, var(--glow1) 0%, transparent 45%),
+        radial-gradient(circle at 70% 30%, var(--glow2) 0%, transparent 45%);
+      filter:blur(90px) brightness(.7);
+      animation:shift 20s ease-in-out infinite alternate;
+    }
+    @keyframes shift{
+      0%{transform:translate(0,0) scale(1)}
+      100%{transform:translate(8%,-6%) scale(1.15)}
+    }
 
-/* Responsivo */
-@media (max-width: 600px) {
-  .container {
-    width: 90%;
-    padding: 15px;
-  }
+    /* subtle scanlines for CCTV vibe */
+    .scanlines{
+      position:absolute;
+      inset:0;
+      background:repeating-linear-gradient(
+        0deg,
+        rgba(255,255,255,.03) 0,
+        rgba(255,255,255,.03) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      pointer-events:none;
+    }
 
-  h2 {
-    font-size: 1.3em;
-  }
+    /* optional content box */
+    .content{
+      position:relative;
+      z-index:10;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100%;
+      text-align:center;
+      padding:2rem;
+    }
+    h1{font-size:clamp(2rem, 8vw, 5rem);letter-spacing:.2em;text-transform:uppercase;color:#fff}
+    p{margin-top:1rem;font-size:1.1rem;opacity:.7}
+  </style>
+</head>
+<body>
+  <div class="aura"></div>
+  <div class="scanlines"></div>
 
-  input, button {
-    font-size: 1em;
-  }
-}
+  <section class="content">
+    <div>
+      <h1>6ROOM1NG</h1>
+      <p>Actividad educativa – No compartas datos personales</p>
+    </div>
+  </section>
 
-/* Estilo de botones e inputs */
-input[type="text"] {
-  width: 80%;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-  margin-top: 15px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  text-align: center;
-}
+  <!-- ---------- TINY JS FOG ---------- -->
+  <script>
+    const fog=document.createElement('canvas');
+    const ctx=fog.getContext('2d');
+    document.body.appendChild(fog);
+    fog.style.position='fixed';
+    fog.style.inset='0';
+    fog.style.pointerEvents='none';
+    fog.style.opacity='.25';
+    fog.style.mixBlendMode='screen';
 
-button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(145deg, #222, #000);
-  color: #fff;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.2s ease;
-}
+    let t=0;
+    function resize(){fog.width=innerWidth; fog.height=innerHeight}
+    addEventListener('resize',resize); resize();
 
-button:hover {
-  background: linear-gradient(145deg, #333, #111);
-  transform: scale(1.05);
-}
+    (function loop(){
+      t+=.002;
+      ctx.fillStyle='rgba(13,13,16,1)';
+      ctx.fillRect(0,0,fog.width,fog.height);
+      for(let i=0;i<3;i++){
+        ctx.beginPath();
+        ctx.arc(
+          fog.width*(.3+.2*Math.sin(t+i*2)),
+          fog.height*(.4+.3*Math.cos(t*1.3+i*1.5)),
+          80+40*Math.sin(t*2+i),
+          0,Math.PI*2
+        );
+        ctx.fillStyle=`rgba(157,78,221,${.08+.04*Math.sin(t*3+i)})`;
+        ctx.fill();
+      }
+      requestAnimationFrame(loop);
+    })();
+  </script>
+</body>
+</html>
