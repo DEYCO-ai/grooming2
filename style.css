@@ -1,117 +1,110 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <title>6ROOM1NG – Roomscape</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    /* ---------- RESET ---------- */
-    *{margin:0;padding:0;box-sizing:border-box}
-    html,body{height:100%}
+/* Fondo principal */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 
-    /* ---------- COLOR PALETTE ---------- */
-    :root{
-      --ink:#0d0d10;
-      --glow1:#9d4edd;
-      --glow2:#3c096c;
-      --spot:#ff0055;
-    }
+  /* Fondo de tu imagen */
+  background: url('hollow.jpg') no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
+}
 
-    /* ---------- ROOMSCAPE ---------- */
-    body{
-      background:var(--ink);
-      overflow:hidden;
-      font-family:'Segoe UI',sans-serif;
-      color:#ccc;
-    }
+/* Capa de oscurecimiento y desenfoque (aura misteriosa) */
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.95) 90%);
+  backdrop-filter: blur(8px);
+  z-index: 0;
+}
 
-    /* animated gradient that simulates a distant light-source */
-    .aura{
-      position:absolute;
-      inset:-20%;
-      background:
-        radial-gradient(circle at 30% 70%, var(--glow1) 0%, transparent 45%),
-        radial-gradient(circle at 70% 30%, var(--glow2) 0%, transparent 45%);
-      filter:blur(90px) brightness(.7);
-      animation:shift 20s ease-in-out infinite alternate;
-    }
-    @keyframes shift{
-      0%{transform:translate(0,0) scale(1)}
-      100%{transform:translate(8%,-6%) scale(1.15)}
-    }
+/* Capa de luz tenue (efecto aura) */
+body::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, transparent 70%);
+  z-index: 1;
+  mix-blend-mode: overlay;
+}
 
-    /* subtle scanlines for CCTV vibe */
-    .scanlines{
-      position:absolute;
-      inset:0;
-      background:repeating-linear-gradient(
-        0deg,
-        rgba(255,255,255,.03) 0,
-        rgba(255,255,255,.03) 1px,
-        transparent 1px,
-        transparent 3px
-      );
-      pointer-events:none;
-    }
+/* Caja de contenido (nivel, acertijo, etc.) */
+.container {
+  position: relative;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  padding: 25px 20px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+  animation: fadeIn 1s ease-in-out;
+}
 
-    /* optional content box */
-    .content{
-      position:relative;
-      z-index:10;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      height:100%;
-      text-align:center;
-      padding:2rem;
-    }
-    h1{font-size:clamp(2rem, 8vw, 5rem);letter-spacing:.2em;text-transform:uppercase;color:#fff}
-    p{margin-top:1rem;font-size:1.1rem;opacity:.7}
-  </style>
-</head>
-<body>
-  <div class="aura"></div>
-  <div class="scanlines"></div>
+/* Efecto de entrada suave */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-  <section class="content">
-    <div>
-      <h1>6ROOM1NG</h1>
-      <p>Actividad educativa – No compartas datos personales</p>
-    </div>
-  </section>
+/* Input y botón */
+input[type="text"] {
+  width: 80%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  margin-top: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  text-align: center;
+}
 
-  <!-- ---------- TINY JS FOG ---------- -->
-  <script>
-    const fog=document.createElement('canvas');
-    const ctx=fog.getContext('2d');
-    document.body.appendChild(fog);
-    fog.style.position='fixed';
-    fog.style.inset='0';
-    fog.style.pointerEvents='none';
-    fog.style.opacity='.25';
-    fog.style.mixBlendMode='screen';
+button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(145deg, #1a1a1a, #000);
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 8px rgba(255,255,255,0.1);
+}
 
-    let t=0;
-    function resize(){fog.width=innerWidth; fog.height=innerHeight}
-    addEventListener('resize',resize); resize();
+button:hover {
+  background: linear-gradient(145deg, #222, #111);
+  transform: scale(1.05);
+}
 
-    (function loop(){
-      t+=.002;
-      ctx.fillStyle='rgba(13,13,16,1)';
-      ctx.fillRect(0,0,fog.width,fog.height);
-      for(let i=0;i<3;i++){
-        ctx.beginPath();
-        ctx.arc(
-          fog.width*(.3+.2*Math.sin(t+i*2)),
-          fog.height*(.4+.3*Math.cos(t*1.3+i*1.5)),
-          80+40*Math.sin(t*2+i),
-          0,Math.PI*2
-        );
-        ctx.fillStyle=`rgba(157,78,221,${.08+.04*Math.sin(t*3+i)})`;
-        ctx.fill();
-      }
-      requestAnimationFrame(loop);
-    })();
-  </script>
-</body>
-</html>
+/* Adaptación a celular */
+@media (max-width: 600px) {
+  .container {
+    padding: 20px 15px;
+  }
+
+  h2 {
+    font-size: 1.2em;
+  }
+
+  input, button {
+    font-size: 1em;
+  }
+}
