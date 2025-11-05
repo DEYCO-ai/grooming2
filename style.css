@@ -1,23 +1,19 @@
-/* Fondo principal */
-body {
+@@ -2,67 +2,103 @@
   margin: 0;
   padding: 0;
-  font-family: 'Poppins', sans-serif;
-  color: #fff;
-  overflow: hidden;
   height: 100vh;
+  background: url('fondo.png.png') no-repeat center center/cover;
+  font-family: 'Cinzel', serif;
+  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
-
-  /* Fondo de tu imagen */
-  background: url('fondo.png.png') no-repeat center center fixed;
-  background-size: cover;
+  background-color: black;
   position: relative;
+  overflow: hidden;
 }
 
-/* Capa de oscurecimiento y desenfoque (aura misteriosa) */
+/* Fondo más oscuro y nítido */
 body::before {
   content: "";
   position: absolute;
@@ -25,12 +21,12 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.95) 90%);
-  backdrop-filter: blur(8px);
-  z-index: 0;
+  background: url('fondo.png.png') no-repeat center center/cover;
+  filter: brightness(40%) contrast(120%) saturate(90%);
+  z-index: -2;
 }
 
-/* Capa de luz tenue (efecto aura) */
+/* Capa de oscurecimiento adicional */
 body::after {
   content: "";
   position: absolute;
@@ -38,73 +34,73 @@ body::after {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, transparent 70%);
-  z-index: 1;
-  mix-blend-mode: overlay;
+  background: radial-gradient(circle at center, rgba(0,0,0,0.7), rgba(0,0,0,0.95));
+  z-index: -1;
 }
 
-/* Caja de contenido (nivel, acertijo, etc.) */
 .container {
-  position: relative;
-  z-index: 2;
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 18px;
-  padding: 25px 20px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
   width: 90%;
   max-width: 400px;
-  box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
-  animation: fadeIn 1s ease-in-out;
 }
 
-/* Efecto de entrada suave */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
+
+.container {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  width: 90%;
+  max-width: 400px;
 }
 
-/* Input y botón */
-input[type="text"] {
+h1 {
+  font-size: 2.5em;
+  letter-spacing: 4px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 0.9em;
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+input {
   width: 80%;
   padding: 10px;
-  border-radius: 8px;
+  margin: 8px 0;
   border: none;
-  outline: none;
-  margin-top: 15px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  border-radius: 5px;
   text-align: center;
 }
 
 button {
-  margin-top: 15px;
+  background-color: #222;
+  color: white;
   padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(145deg, #1a1a1a, #000);
-  color: #fff;
+  border: 1px solid white;
+  border-radius: 5px;
   cursor: pointer;
-  font-weight: bold;
-  transition: all 0.2s ease;
-  box-shadow: 0 0 8px rgba(255,255,255,0.1);
+  transition: 0.3s;
 }
 
 button:hover {
-  background: linear-gradient(145deg, #222, #111);
-  transform: scale(1.05);
+  background-color: white;
+  color: black;
 }
 
-/* Adaptación a celular */
-@media (max-width: 600px) {
-  .container {
-    padding: 20px 15px;
-  }
+.aviso {
+  font-size: 0.8em;
+  color: #bbb;
+  margin-top: 5px;
+}
 
-  h2 {
-    font-size: 1.2em;
-  }
-
-  input, button {
-    font-size: 1em;
-  }
+.oculto {
+  display: none;
 }
