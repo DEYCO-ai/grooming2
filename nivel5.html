@@ -3,37 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nivel 5</title>
+  <title>Nivel 1</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h2>¡Felicidades!</h2>
-    <p>Completaste todos los niveles. Demostraste que sabés cómo cuidarte en internet.</p>
-    <p>Mostrá este código a tu profesor para reclamar tu recompensa:</p>
-    <h3 id="codigo"></h3>
+    <h2>Nivel 5: mensaje oculto</h2>
+    <p>texto cifrado: ho jurrplqj hv ho dfrvr vhaxdo d phqruhv sru lqwhuqhw:</p>
+    <p class="puzzle">pista: cifrado cesar de 3 desplazamientos (¡¡¡sin mayusculas ni puntos!!!).</p>
+    <input type="text" id="respuesta" placeholder="Escribí tu respuesta">
+    <button onclick="verificar()">Enviar</button>
+    <p id="error"></p>
   </div>
 
   <script>
-  const jugador = JSON.parse(localStorage.getItem('jugador')) || { nombre: 'Jugador', curso: '' };
-  const codigo = "SAFE-" + jugador.nombre.toUpperCase().substring(0,3) + "-42";
-  document.getElementById('codigo').innerText = codigo;
-
-  // Enviar datos a la hoja
-  fetch("https://script.google.com/macros/s/AKfycbzXCUSQecXb1iLeomsTIkJc6aFXpuBe8aeGUJu7ps7i_wvcCevqSLk7pDBy_0xCLtT6/exec", {
-  method: "POST",
-  mode: "no-cors",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    nombre: jugador.nombre,
-    curso: jugador.curso,
-    codigo: codigo
-  })
-}).then(() => {
-  // Espera 3 segundos y redirige al nivel 6
-  setTimeout(() => {
-    window.location.href = "nivel6.html";
-  }, 3000);
-});
+    function verificar() {
+      const r = document.getElementById('respuesta').value.toLowerCase().trim();
+      if (r === "el grooming es el acoso sexual a menores por internet") {
+        window.location.href = 'nivel2.html';
+      } else {
+        document.getElementById('error').innerText = "Incorrecto, intentá de nuevo.";
+      }
+    }
+  </script>
+</body>
+</html>
