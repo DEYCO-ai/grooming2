@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-  <title>Rompecabezas </title>
+  <title>Rompecabezas – CONFIANZA</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
     :root{
@@ -32,21 +32,22 @@
       border-radius:15px;
       padding:20px 15px;
       width:92vw;
-      max-width:360px;
+      max-width:400px;
       box-shadow:0 0 15px rgba(255,255,255,.1);
     }
     h1{font-size:1.4em;margin-bottom:.2em;letter-spacing:1px;color:var(--neon)}
-    h2{font-size:1em;margin-bottom:.8em;font-weight:300}
+    h2{font-size:1em;margin-bottom:.4em;font-weight:300}
+    #cronito{font-size:.9em;margin-bottom:.8em;color:var(--accent)}
     #puzzle{
       display:grid;
-      grid-template-columns:repeat(3,1fr);
+      grid-template-columns:repeat(4,1fr);
       gap:4px;
       margin:0 auto 15px;
       touch-action:none;
     }
     .tile{
       aspect-ratio:1/1;
-      background-size:360px 360px;
+      background-size:480px 120px;
       border-radius:6px;
       cursor:pointer;
       transition:transform .15s;
@@ -57,7 +58,7 @@
     #inputBox{display:none;margin-top:12px}
     #inputBox input{
       padding:8px 12px;font-size:1.1em;border:1px solid rgba(255,255,255,.3);
-      background:transparent;color:#eee;border-radius:8px;outline:none;width:60%
+      background:transparent;color:#eee;border-radius:8px;outline:none;width:70%
     }
     #inputBox button{
       margin-left:6px;padding:8px 14px;background:#222;color:#fff;
@@ -71,6 +72,7 @@
 <div class="container">
   <h1>🔠 Rompecabezas</h1>
   <h2>Es lo que intentan ganarse los groomers</h2>
+  <p id="cronito">Tiempo: <span id="tiempo">90</span> s</p>
 
   <div id="puzzle"></div>
 
@@ -85,12 +87,20 @@
 
 <script>
   /* ----------  CONFIG  ---------- */
-  const PALABRA   = "CONFIANZA";   // palabra que aparece partida
-  const RESPUESTA = "CONFIANZA";   // respuesta correcta
-  const TAM       = 3;             // 3×3
-  const TILES     = TAM*TAM;
+  const PALABRA   = "CONFIANZA";   // 9 letras
+  const RESPUESTA = "CONFIANZA";
+  const TILES     = 4;             // 4 trozos (4×1)
+  const tiempoIni = 30;            // segundos
 
-  /* ----------  CREAR PIEZAS Y MEZCLAR  ---------- */
+  let tiempo = tiempoIni;
+  const spanT = document.getElementById('tiempo');
+  const timer = setInterval(()=>{
+    tiempo--;
+    spanT.textContent = tiempo;
+    if(tiempo<=0){clearInterval(timer); bloquear(); msg('Se acabó el tiempo','bad'); setTimeout(()=>location.reload(),1500);}
+  },1000);
+
+  /* ----------  CREAR TROZOS Y MEZCLAR  ---------- */
   const puzzle = document.getElementById('puzzle');
   let indices  = Array.from({length:TILES},(_,i)=>i);
 
@@ -102,14 +112,12 @@
     const tile = document.createElement('div');
     tile.className = 'tile';
     tile.dataset.real = real;
-    const row = Math.floor(real/TAM);
-    const col = real%TAM;
-    // SVG con la palabra escrita en grande (360×360 px, trozos 120×120)
+    // SVG 480×120 px → cada trozo 120×120 px
     tile.style.backgroundImage = `url('data:image/svg+xml,\
-      <svg xmlns="http://www.w3.org/2000/svg" width="360" height="360">\
-      <rect width="360" height="360" fill="%230d0d10"/>\
-      <text x="50%" y="50%" font-size="90" fill="white" text-anchor="middle" dominant-baseline="central">${PALABRA}</text></svg>')`;
-    tile.style.backgroundPosition = `-${col*120}px -${row*120}px`;
+      <svg xmlns="http://www.w3.org/2000/svg" width="480" height="120">\
+      <rect width="480" height="120" fill="%230d0d10"/>\
+      <text x="50%" y="50%" font-size="60" fill="white" text-anchor="middle" dominant-baseline="central">${PALABRA}</text></svg>')`;
+    tile.style.backgroundPosition = `-${real*120}px 0`;
     puzzle.appendChild(tile);
   });
 
@@ -141,6 +149,7 @@
     const act = [...puzzle.children].map(t=>parseInt(t.dataset.real));
     const ok  = act.every((v,i)=>v===i);
     if(ok){
+      clearInterval(timer);
       puzzle.querySelectorAll('.tile').forEach(t=>t.classList.add('correct'));
       setTimeout(()=>document.getElementById('inputBox').style.display='block',500);
     }
@@ -159,6 +168,9 @@
       msg.textContent='Palabra incorrecta, inténtalo de nuevo.';
     }
   }
+
+  /* ----------  BLOQUEAR TABLERO  ---------- */
+  function bloquear(){puzzle.style.pointerEvents='none';}
 </script>
 </body>
 </html>
