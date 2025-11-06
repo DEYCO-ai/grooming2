@@ -114,10 +114,10 @@
     tile.dataset.real = real;
     // SVG 480×120 px → cada trozo 120×120 px
     tile.style.backgroundImage = `url('data:image/svg+xml,\
-      <svg xmlns="http://www.w3.org/2000/svg" width="480" height="120">\
-      <rect width="480" height="120" fill="%230d0d10"/>\
-      <text x="50%" y="50%" font-size="60" fill="white" text-anchor="middle" dominant-baseline="central">${PALABRA}</text></svg>')`;
-    tile.style.backgroundPosition = `-${real*120}px 0`;
+  <svg xmlns="http://www.w3.org/2000/svg" width="560" height="120">\
+  <rect width="560" height="120" fill="%230d0d10"/>\
+  <text x="50%" y="50%" font-size="45" fill="white" text-anchor="middle" dominant-baseline="central">${GROOMING}</text></svg>')`;
+tile.style.backgroundPosition = `-${real*140}px 0`;
     puzzle.appendChild(tile);
   });
 
