@@ -116,12 +116,11 @@
   <div id="opciones"></div>
 </div>
 
-<!-- Pantallas finales -->
 <div id="overlay">
   <div class="final-box">
     <h3 id="finalTit"></h3>
     <p id="finalTxt"></p>
-    <button onclick="siguienteNivel()">Continuar</button>
+    <button id="btnFinal">Continuar</button>
   </div>
 </div>
 
@@ -131,7 +130,8 @@
     start:{
       mensajes:[
         {tipo:"el",texto:"Desconocido: Hola, te vi en Insta 😏"},
-        {tipo:"el",texto:"¿Me pasas tu número para hablar por Whats?"}
+        {tipo:"el",texto:"¿Me pasas tu número para hablar por Whats?"},
+        {tipo:"el",texto:"Tengo fotos tuyas, querés verlas?"}
       ],
       opciones:[
         {texto:"a) Dale, acá va...",siguiente:"mal1"},
@@ -141,15 +141,17 @@
     },
     mal1:{
       mensajes:[
-        {tipo:"yo",texto:"Dale, +54 11 1234-5678"},
-        {tipo:"el",texto:"Gracias linda 😘, después te escribo"}
+        {tipo:"yo",texto:"+54 11 1234-5678"},
+        {tipo:"el",texto:"Gracias linda 😘, después te escribo"},
+        {tipo:"el",texto:"Mandame una foto tuya ahora 😉"}
       ],
       final:"mal"
     },
     neutro1:{
       mensajes:[
         {tipo:"yo",texto:"No doy mi número a desconocidos"},
-        {tipo:"el",texto:"Bueno, hablamos por acá entonces 😉"}
+        {tipo:"el",texto:"Bueno, hablamos por acá entonces 😉"},
+        {tipo:"el",texto:"¿Al menos una foto? No seas mala onda"}
       ],
       final:"neutro"
     },
@@ -165,12 +167,13 @@
   const chatBox   = document.getElementById('chatBox');
   const opciones  = document.getElementById('opciones');
   let nodoActual  = "start";
+  let finalTipo   = null;
 
-  /* ----------  IMPRIMIR MENSAJES  ---------- */
+  /* ----------  IMPRIMIR MENSAJES (1 s entre ellos)  ---------- */
   function escribir(mensajes,onEnd){
     let i=0;
     function loop(){
-      if(i>=mensajes.length)return onEnd();
+      if(i>=mensajes.length)return setTimeout(onEnd,1000); // extra segundo antes de opciones/botón
       const m=mensajes[i];
       const div=document.createElement('div');
       div.className='msg '+m.tipo;
@@ -178,7 +181,7 @@
       chatBox.appendChild(div);
       chatBox.scrollTop=chatBox.scrollHeight;
       i++;
-      setTimeout(loop,700);
+      setTimeout(loop,1000);
     }
     loop();
   }
@@ -207,14 +210,16 @@
 
   /* ----------  MOSTRAR FINAL  ---------- */
   function mostrarFinal(tipo){
+    finalTipo=tipo;
     const tit=document.getElementById('finalTit');
     const txt=document.getElementById('finalTxt');
     const overlay=document.getElementById('overlay');
     overlay.style.display='flex';
+
     switch(tipo){
       case "mal":
         tit.textContent="❌ Fin malo";
-        txt.textContent="Compartiste datos personales. Podrían usarlos contra ti.";
+        txt.textContent="Compartiste datos. Podrían usarlos contra ti.";
         break;
       case "neutro":
         tit.textContent="⚠️  Fin neutro";
@@ -227,10 +232,14 @@
     }
   }
 
-  /* ----------  CONTINUAR  ---------- */
-  function siguienteNivel(){
-    window.location.href='nivel5.html';
-  }
+  /* ----------  BOTÓN FINAL  ---------- */
+  document.getElementById('btnFinal').onclick=()=>{
+    if(finalTipo==='bien'){
+      window.location.href='nivel5.html';
+    }else{
+      location.reload(); // reinicia para reintentar
+    }
+  };
 
   /* ----------  INICIAR  ---------- */
   escribir(arbol.start.mensajes,()=>mostrarOpciones(arbol.start.opciones));
