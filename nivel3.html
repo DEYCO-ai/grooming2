@@ -114,11 +114,16 @@
     tile.className = 'tile';
     tile.dataset.real = real;
     // SVG 560×120 px → cada trozo 140×120 px
-    tile.style.backgroundImage = `url('data:image/svg+xml,\
-      <svg xmlns="http://www.w3.org/2000/svg" width="560" height="120">\
-      <rect width="560" height="120" fill="%230d0d10"/>\
-      <text x="50%" y="50%" font-size="42" fill="white" text-anchor="middle" dominant-baseline="central">${PALABRA}</text></svg>')`;
-    tile.style.backgroundPosition = `-${real*140}px 0`;
+    const ANCHO_TROZO = 200;          // nuevo ancho por trozo
+const ALTO_TROZO  = 120;          // altura fija
+const FONT_SIZE   = 36;           // tamaño de letra reducido
+const ANCHO_SVG   = ANCHO_TROZO * TILES;  // 800 px total
+
+tile.style.backgroundImage = `url('data:image/svg+xml,\
+  <svg xmlns="http://www.w3.org/2000/svg" width="${ANCHO_SVG}" height="${ALTO_TROZO}">\
+  <rect width="${ANCHO_SVG}" height="${ALTO_TROZO}" fill="%230d0d10"/>\
+  <text x="50%" y="50%" font-size="${FONT_SIZE}" fill="white" text-anchor="middle" dominant-baseline="central">${PALABRA}</text></svg>')`;
+tile.style.backgroundPosition = `-${real*ANCHO_TROZO}px 0`;
     puzzle.appendChild(tile);
   });
 
