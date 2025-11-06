@@ -1,62 +1,239 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nivel 4</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>Nivel 4 – Conversación peligrosa</title>
   <style>
-    .chat { text-align: left; margin-top: 15px; }
-    .msg { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; margin: 5px 0; }
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+    :root{
+      --bg:#0d0d10;
+      --neon:#9d4edd;
+      --accent:#ff0055;
+      --ok:#4ef04e;
+      --bad:#ff4e4e;
+      --chat:rgba(255,255,255,.08);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Poppins',sans-serif;
+      background:url('fondo.png.png') no-repeat center center/cover;
+      color:#eee;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      backdrop-filter:blur(6px) brightness(.3);
+      -webkit-user-select:none;user-select:none;
+    }
+    .container{
+      background:rgba(0,0,0,.65);
+      border:1px solid rgba(255,255,255,.2);
+      border-radius:15px;
+      padding:15px;
+      width:92vw;
+      max-width:360px;
+      height:82vh;
+      display:flex;
+      flex-direction:column;
+    }
+    h2{font-size:1.25em;margin-bottom:.4em;letter-spacing:1px}
+    #cronito{font-size:.9em;margin-bottom:.6em;color:var(--accent)}
+    #chatBox{
+      flex:1;
+      overflow-y:auto;
+      padding:8px;
+      background:var(--chat);
+      border-radius:10px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      font-size:.95em;
+    }
+    .msg{
+      padding:8px 12px;
+      border-radius:12px;
+      max-width:78%;
+      word-break:break-word;
+    }
+    .el{
+      align-self:flex-start;
+      background:rgba(255,255,255,.12);
+    }
+    .yo{
+      align-self:flex-end;
+      background:var(--neon);
+      color:#000;
+    }
+    #opciones{
+      margin-top:10px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .opt{
+      padding:10px;
+      background:rgba(255,255,255,.1);
+      border:1px solid rgba(255,255,255,.2);
+      border-radius:8px;
+      cursor:pointer;
+      transition:.25s;
+    }
+    .opt:hover{background:rgba(255,255,255,.2)}
+    #overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.75);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      z-index:999;
+    }
+    .final-box{
+      background:var(--bg);
+      border:2px solid var(--accent);
+      border-radius:12px;
+      padding:25px 20px;
+      width:80vw;
+      max-width:300px;
+    }
+    .final-box h3{margin-bottom:10px;font-size:1.3em}
+    .final-box button{
+      margin-top:15px;padding:8px 18px;background:#222;color:#fff;
+      border:1px solid rgba(255,255,255,.2);border-radius:8px;cursor:pointer
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Nivel 4: Conversación sospechosa</h2>
-    <div id="chat" class="chat"></div>
-    <button id="continuar">Continuar</button>
+
+<div class="container">
+  <h2>💬 Nivel 4 – Conversación peligrosa</h2>
+  <p id="cronito">Elige sabiamente...</p>
+
+  <div id="chatBox"></div>
+  <div id="opciones"></div>
+</div>
+
+<!-- Pantallas finales -->
+<div id="overlay">
+  <div class="final-box">
+    <h3 id="finalTit"></h3>
+    <p id="finalTxt"></p>
+    <button onclick="siguienteNivel()">Continuar</button>
   </div>
+</div>
 
-  <script>
-const mensajes = [
-  "Desconocido: Que onda? Creo que te vi en un grupo o algo así 😅",
-  "Vos: Mmm no me suena tu cara, ¿quién sos?",
-  "Desconocido: Jajaja, capaz me confundo 😅 igual parecés re buena onda",
-  "Vos: Ah gracias... ¿de dónde sos?",
-  "Desconocido: Cerca tuyo, creo 😏 ¿vas a la 47?",
-  "Vos: Sí, ¿cómo sabés eso?",
-  "Desconocido: Tengo amigos ahí, me mostraron tu perfil xd",
-  "Vos: Ok?... jaja",
-  "Desconocido: Nah tranqui, sos linda, ¿te paso mi Insta y hablamos ahí?.",
-  "Vos: que....",
-  "Desconocido: so xdXDxdDX.",
-  "Vos:Prefiero dejarlo acá, no te conozco mucho.",
-  "Desconocido: Dalee, no seas así 😅 pasame una foto tuya mejor.",
-  "Vos: No, esto no me da confianza. Voy a bloquearte."
-];
+<script>
+  /* ----------  ÁRBOL DE CONVERSACIÓN  ---------- */
+  const arbol = {
+    start:{
+      mensajes:[
+        {tipo:"el",texto:"Desconocido: Hola, te vi en Insta 😏"},
+        {tipo:"el",texto:"¿Me pasas tu número para hablar por Whats?"}
+      ],
+      opciones:[
+        {texto:"a) Dale, acá va...",siguiente:"mal1"},
+        {texto:"b) No doy mi número a desconocidos",siguiente:"neutro1"},
+        {texto:"c) Voy a avisar a un adulto",siguiente:"bien1"}
+      ]
+    },
+    mal1:{
+      mensajes:[
+        {tipo:"yo",texto:"Dale, +54 11 1234-5678"},
+        {tipo:"el",texto:"Gracias linda 😘, después te escribo"}
+      ],
+      final:"mal"
+    },
+    neutro1:{
+      mensajes:[
+        {tipo:"yo",texto:"No doy mi número a desconocidos"},
+        {tipo:"el",texto:"Bueno, hablamos por acá entonces 😉"}
+      ],
+      final:"neutro"
+    },
+    bien1:{
+      mensajes:[
+        {tipo:"yo",texto:"Lo voy a comentar con un adulto"},
+        {tipo:"el",texto:"Sos una aburrida, bloqueado."}
+      ],
+      final:"bien"
+    }
+  };
 
-    let i = 0;
-    const chat = document.getElementById('chat');
-    const btn = document.getElementById('continuar');
+  const chatBox   = document.getElementById('chatBox');
+  const opciones  = document.getElementById('opciones');
+  let nodoActual  = "start";
 
-    btn.onclick = () => {
-      if (i < mensajes.length) {
-        const msg = document.createElement('p');
-        msg.classList.add('msg');
-        msg.textContent = mensajes[i];
-        chat.appendChild(msg);
+  /* ----------  IMPRIMIR MENSAJES  ---------- */
+  function escribir(mensajes,onEnd){
+    let i=0;
+    function loop(){
+      if(i>=mensajes.length)return onEnd();
+      const m=mensajes[i];
+      const div=document.createElement('div');
+      div.className='msg '+m.tipo;
+      div.textContent=m.texto;
+      chatBox.appendChild(div);
+      chatBox.scrollTop=chatBox.scrollHeight;
+      i++;
+      setTimeout(loop,700);
+    }
+    loop();
+  }
 
-        // Si acabamos de mostrar el último mensaje...
-        if (i === mensajes.length - 1) {
-          btn.textContent = "Avisar a un adulto";
-          btn.onclick = () => {
-            alert("¡Bien hecho! Siempre cuéntales a adultos de confianza cuando alguien te haga sentir incómodo o pida cosas privadas.");
-            window.location.href = 'nivel5.html';
-          };
-        }
-        i++;
-      }
-    };
-  </script>
+  /* ----------  MOSTRAR OPCIONES  ---------- */
+  function mostrarOpciones(ops){
+    opciones.innerHTML='';
+    ops.forEach(o=>{
+      const b=document.createElement('div');
+      b.className='opt';
+      b.textContent=o.texto;
+      b.onclick=()=>irA(o.siguiente);
+      opciones.appendChild(b);
+    });
+  }
+
+  /* ----------  IR A NODO  ---------- */
+  function irA(id){
+    opciones.innerHTML='';
+    const nodo=arbol[id];
+    escribir(nodo.mensajes,()=>{
+      if(nodo.final)return mostrarFinal(nodo.final);
+      mostrarOpciones(nodo.opciones);
+    });
+  }
+
+  /* ----------  MOSTRAR FINAL  ---------- */
+  function mostrarFinal(tipo){
+    const tit=document.getElementById('finalTit');
+    const txt=document.getElementById('finalTxt');
+    const overlay=document.getElementById('overlay');
+    overlay.style.display='flex';
+    switch(tipo){
+      case "mal":
+        tit.textContent="❌ Fin malo";
+        txt.textContent="Compartiste datos personales. Podrían usarlos contra ti.";
+        break;
+      case "neutro":
+        tit.textContent="⚠️  Fin neutro";
+        txt.textContent="No pasaste datos, pero tampoco avisaste. La próxima cuéntalo.";
+        break;
+      case "bien":
+        tit.textContent="✅ Fin bueno";
+        txt.textContent="¡Bloqueaste y avisaste! Actitud segura.";
+        break;
+    }
+  }
+
+  /* ----------  CONTINUAR  ---------- */
+  function siguienteNivel(){
+    window.location.href='nivel5.html';
+  }
+
+  /* ----------  INICIAR  ---------- */
+  escribir(arbol.start.mensajes,()=>mostrarOpciones(arbol.start.opciones));
+</script>
 </body>
 </html>
