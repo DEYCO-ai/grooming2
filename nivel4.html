@@ -129,12 +129,12 @@
   const arbol = {
     start:{
       mensajes:[
-        {tipo:"el",texto:"Desconocido: Hola, te vi en Insta 😏"},
+        {tipo:"el",texto:"Desconocido: que onda, te vi en insta y estas re linda 😏"},
         {tipo:"el",texto:"¿Me pasas tu número para hablar por Whats?"},
-        {tipo:"el",texto:"Tengo fotos tuyas, querés verlas?"}
+        {tipo:"el",texto:"jugamos a algo...?"}
       ],
       opciones:[
-        {texto:"a) Dale, acá va...",siguiente:"mal1"},
+        {texto:"a) jaja dale, acá va...",siguiente:"mal1"},
         {texto:"b) No doy mi número a desconocidos",siguiente:"neutro1"},
         {texto:"c) Voy a avisar a un adulto",siguiente:"bien1"}
       ]
@@ -150,7 +150,7 @@
     neutro1:{
       mensajes:[
         {tipo:"yo",texto:"No doy mi número a desconocidos"},
-        {tipo:"el",texto:"Bueno, hablamos por acá entonces 😉"},
+        {tipo:"el",texto:"Bueno, hablamos por acá entonces miamorr 😉"},
         {tipo:"el",texto:"¿Al menos una foto? No seas mala onda"}
       ],
       final:"neutro"
@@ -158,7 +158,7 @@
     bien1:{
       mensajes:[
         {tipo:"yo",texto:"Lo voy a comentar con un adulto"},
-        {tipo:"el",texto:"Sos una aburrida, bloqueado."}
+        {tipo:"el",texto:"anda ortiva."}
       ],
       final:"bien"
     }
@@ -219,7 +219,7 @@
     switch(tipo){
       case "mal":
         tit.textContent="❌ Fin malo";
-        txt.textContent="Compartiste datos. Podrían usarlos contra ti.";
+        txt.textContent="Compartiste datos. sos pollo.";
         break;
       case "neutro":
         tit.textContent="⚠️  Fin neutro";
@@ -227,7 +227,7 @@
         break;
       case "bien":
         tit.textContent="✅ Fin bueno";
-        txt.textContent="¡Bloqueaste y avisaste! Actitud segura.";
+        txt.textContent="¡Bloqueaste y avisaste! como se debe craackkk.";
         break;
     }
   }
