@@ -27,46 +27,47 @@
       -webkit-user-select:none;user-select:none;
     }
     .container{
-      background:rgba(0,0,0,.65);
-      border:1px solid rgba(255,255,255,.2);
-      border-radius:15px;
-      padding:20px 15px;
-      width:92vw;
-      max-width:400px;
-      box-shadow:0 0 15px rgba(255,255,255,.1);
+        background:rgba(0,0,0,.65);
+        border:1px solid rgba(255,255,255,.2);
+        border-radius:15px;
+        padding:20px 15px;
+        width:92vw;
+        max-width:400px;
+        box-shadow:0 0 15px rgba(255,255,255,.1);
     }
     h1{font-size:1.4em;margin-bottom:.2em;letter-spacing:1px;color:var(--neon)}
     h2{font-size:1em;margin-bottom:.4em;font-weight:300}
     #cronito{font-size:.9em;margin-bottom:.8em;color:var(--accent)}
     #puzzle{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:4px;
-      margin:0 auto 15px;
-      touch-action:none;
+        display:grid;
+        grid-template-columns:repeat(4,1fr);
+        gap:4px;
+        margin:0 auto 15px;
+        touch-action:none;
     }
     .tile{
-      aspect-ratio:1/1;
-      background-size:480px 120px;
-      border-radius:6px;
-      cursor:pointer;
-      transition:transform .15s;
+        aspect-ratio:1/1;
+        background-size:560px 120px;
+        border-radius:6px;
+        cursor:pointer;
+        transition:transform .15s;
     }
     .tile.dragging{transform:scale(1.08);z-index:10}
     .tile.correct{box-shadow:0 0 10px 2px var(--ok)}
 
     #inputBox{display:none;margin-top:12px}
     #inputBox input{
-      padding:8px 12px;font-size:1.1em;border:1px solid rgba(255,255,255,.3);
-      background:transparent;color:#eee;border-radius:8px;outline:none;width:70%
+        padding:8px 12px;font-size:1.1em;border:1px solid rgba(255,255,255,.3);
+        background:transparent;color:#eee;border-radius:8px;outline:none;width:70%
     }
     #inputBox button{
-      margin-left:6px;padding:8px 14px;background:#222;color:#fff;
-      border:1px solid rgba(255,255,255,.2);border-radius:8px;cursor:pointer
+        margin-left:6px;padding:8px 14px;background:#222;color:#fff;
+        border:1px solid rgba(255,255,255,.2);border-radius:8px;cursor:pointer
     }
     #msg{height:1.4em;font-weight:600;margin-top:6px}
   </style>
 </head>
+
 <body>
 
 <div class="container">
@@ -90,7 +91,7 @@
   const PALABRA   = "CONFIANZA";   // 9 letras
   const RESPUESTA = "CONFIANZA";
   const TILES     = 4;             // 4 trozos (4×1)
-  const tiempoIni = 30;            // segundos
+  const tiempoIni = 90;            // segundos
 
   let tiempo = tiempoIni;
   const spanT = document.getElementById('tiempo');
@@ -112,12 +113,12 @@
     const tile = document.createElement('div');
     tile.className = 'tile';
     tile.dataset.real = real;
-    // SVG 480×120 px → cada trozo 120×120 px
+    // SVG 560×120 px → cada trozo 140×120 px
     tile.style.backgroundImage = `url('data:image/svg+xml,\
-  <svg xmlns="http://www.w3.org/2000/svg" width="560" height="120">\
-  <rect width="560" height="120" fill="%230d0d10"/>\
-  <text x="50%" y="50%" font-size="45" fill="white" text-anchor="middle" dominant-baseline="central">${GROOMING}</text></svg>')`;
-tile.style.backgroundPosition = `-${real*140}px 0`;
+      <svg xmlns="http://www.w3.org/2000/svg" width="560" height="120">\
+      <rect width="560" height="120" fill="%230d0d10"/>\
+      <text x="50%" y="50%" font-size="42" fill="white" text-anchor="middle" dominant-baseline="central">${PALABRA}</text></svg>')`;
+    tile.style.backgroundPosition = `-${real*140}px 0`;
     puzzle.appendChild(tile);
   });
 
