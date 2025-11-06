@@ -2,87 +2,75 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nivel 3 – Ordena y descubre</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>Nivel 3 – Ordena la palabra</title>
   <style>
-    /* ----------  MISMOS ESTILOS BASE  ---------- */
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-
+    :root{
+      --bg:#0d0d10;
+      --neon:#9d4edd;
+      --accent:#ff0055;
+      --ok:#4ef04e;
+      --bad:#ff4e4e;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
     body{
       font-family:'Poppins',sans-serif;
-      background:url('fondo.png.png') no-repeat center center fixed;
-      background-size:cover;
+      background:url('fondo.png.png') no-repeat center center/cover;
       color:#eee;
       height:100vh;
       display:flex;
-      flex-direction:column;
       align-items:center;
       justify-content:center;
       text-align:center;
-      backdrop-filter:blur(6px) brightness(0.3);
+      backdrop-filter:blur(6px) brightness(.3);
+      -webkit-user-select:none;user-select:none;
     }
     .container{
-      background:rgba(0,0,0,.6);
+      background:rgba(0,0,0,.65);
       border:1px solid rgba(255,255,255,.2);
       border-radius:15px;
-      padding:25px 20px;
-      width:90%;
-      max-width:400px;
+      padding:20px 15px;
+      width:92vw;
+      max-width:360px;
       box-shadow:0 0 15px rgba(255,255,255,.1);
     }
-    h2{
-      font-size:1.3em;
-      margin-bottom:15px;
-      letter-spacing:1px;
-    }
+    h2{font-size:1.25em;margin-bottom:.4em;letter-spacing:1px}
+    #cronito{font-size:.9em;margin-bottom:.8em;color:var(--accent)}
     #puzzle{
       display:grid;
-      grid-template-columns:repeat(4,70px);
-      grid-gap:4px;
-      margin:15px auto;
-      user-select:none;
+      grid-template-columns:repeat(4,1fr);
+      gap:3px;
+      margin:0 auto 15px;
+      touch-action:none;
     }
     .tile{
-      width:70px;
-      height:70px;
-      background-size:280px 280px;
+      aspect-ratio:1/1;
+      background-size:320px 80px;  /* 4 trozos horizontales */
       border-radius:6px;
-      cursor:grab;
-      transition:transform .2s;
+      cursor:pointer;
+      transition:transform .15s;
     }
     .tile.dragging{transform:scale(1.08);z-index:10}
-    .tile.correct{box-shadow:0 0 10px 2px #4ef04e}
+    .tile.correct{box-shadow:0 0 10px 2px var(--ok)}
 
-    #inputBox{display:none;margin-top:15px}
+    #inputBox{display:none;margin-top:12px}
     #inputBox input{
-      padding:10px 15px;
-      font-size:1.1em;
-      border:1px solid rgba(255,255,255,.3);
-      background:transparent;
-      color:#eee;
-      border-radius:8px;
-      outline:none;
+      padding:8px 12px;font-size:1.1em;border:1px solid rgba(255,255,255,.3);
+      background:transparent;color:#eee;border-radius:8px;outline:none;width:45%
     }
     #inputBox button{
-      margin-left:8px;
-      padding:10px 18px;
-      background:#222;
-      color:#fff;
-      border:1px solid rgba(255,255,255,.2);
-      border-radius:8px;
-      cursor:pointer;
-      transition:.3s;
+      margin-left:6px;padding:8px 14px;background:#222;color:#fff;
+      border:1px solid rgba(255,255,255,.2);border-radius:8px;cursor:pointer
     }
-    #inputBox button:hover{background:#444}
-
-    #msg{height:1.5em;margin-top:10px;font-weight:600}
+    #msg{height:1.4em;font-weight:600;margin-top:6px}
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>🔍 Nivel 3 – Ordena la imagen</h2>
-  <p>Arrastra las piezas hasta formar el emoji correcto.</p>
+  <h2>🔍 Nivel 3 – Ordena la palabra</h2>
+  <p id="cronito">Tiempo: <span id="tiempo">60</span> s</p>
 
   <div id="puzzle"></div>
 
@@ -97,71 +85,89 @@
 
 <script>
   /* ----------  CONFIG  ---------- */
-  const SOLUCIÓN = "GROOM";
-  const TAM    = 4;
-  const TILES  = TAM*TAM;
-  const EMOJI  = "👁️‍🗨️";
+  const PALABRA   = "CONFIANZA";          // palabra que aparecerá partida
+  const RESPUESTA = "CONFIANZA";          // respuesta que debe escribir el jugador
+  const TILES     = 4;                // 4 trozos horizontales (4×1)
+  const TILES_TOTAL = TILES;
+  const tiempoIni = 60;               // segundos
 
-  /* ----------  CREAR PIEZAS  ---------- */
+  let tiempo = tiempoIni;
+  const spanT = document.getElementById('tiempo');
+  const timer = setInterval(()=>{
+    tiempo--;
+    spanT.textContent = tiempo;
+    if(tiempo<=0){clearInterval(timer); bloquear(); msg('Se acabó el tiempo','bad'); setTimeout(()=>location.reload(),1500);}
+  },1000);
+
+  /* ----------  CREAR TROZOS  ---------- */
   const puzzle = document.getElementById('puzzle');
   let indices  = Array.from({length:TILES},(_,i)=>i);
   indices.sort(()=>Math.random()-.5);
 
-  indices.forEach((real,i)=>{
+  indices.forEach(real=>{
     const tile = document.createElement('div');
     tile.className = 'tile';
-    tile.draggable = true;
     tile.dataset.real = real;
-    const row = Math.floor(real/TAM);
-    const col = real%TAM;
+    // imagen: palabra escrita en SVG, 320×80 px, cada trozo 80×80
     tile.style.backgroundImage = `url('data:image/svg+xml,\
-      <svg xmlns="http://www.w3.org/2000/svg" width="280" height="280">\
-      <text x="50%" y="50%" font-size="240" fill="white" text-anchor="middle" dominant-baseline="central">${EMOJI}</text></svg>')`;
-    tile.style.backgroundPosition = `-${col*70}px -${row*70}px`;
+      <svg xmlns="http://www.w3.org/2000/svg" width="320" height="80">\
+      <rect width="320" height="80" fill="%230d0d10"/>\
+      <text x="50%" y="50%" font-size="50" fill="white" text-anchor="middle" dominant-baseline="central">${PALABRA}</text></svg>')`;
+    tile.style.backgroundPosition = `-${real*80}px 0`;
     puzzle.appendChild(tile);
   });
 
-  /* ----------  DRAG & DROP  ---------- */
-  let dragged = null;
-  puzzle.addEventListener('dragstart',e=>{
-    dragged = e.target;
-    e.target.classList.add('dragging');
-  });
-  puzzle.addEventListener('dragend',e=>e.target.classList.remove('dragging'));
-  puzzle.addEventListener('dragover',e=>e.preventDefault());
-  puzzle.addEventListener('drop',e=>{
-    e.preventDefault();
-    if(e.target.classList.contains('tile') && e.target!==dragged){
-      const all = [...puzzle.children];
-      const i1 = all.indexOf(dragged);
-      const i2 = all.indexOf(e.target);
-      i1<i2 ? e.target.after(dragged) : e.target.before(dragged);
+  /* ----------  SWAP INSTANTÁNEO  ---------- */
+  let sel1 = null;
+  puzzle.addEventListener('click',e=>{
+    if(!e.target.classList.contains('tile')) return;
+    if(sel1===null){
+      sel1=e.target;
+      sel1.style.border='2px solid var(--neon)';
+    }else{
+      if(sel1===e.target){sel1.style.border='';sel1=null;return}
+      // intercambio
+      const aux = sel1.dataset.real;
+      sel1.dataset.real = e.target.dataset.real;
+      e.target.dataset.real = aux;
+      const bg1 = sel1.style.backgroundPosition;
+      const bg2 = e.target.style.backgroundPosition;
+      sel1.style.backgroundPosition = bg2;
+      e.target.style.backgroundPosition = bg1;
+      sel1.style.border='';
+      sel1=null;
       verificar();
     }
   });
 
   /* ----------  VERIFICAR ORDEN  ---------- */
   function verificar(){
-    const actuales = [...puzzle.children].map(t=>parseInt(t.dataset.real));
-    const ok = actuales.every((v,i)=>v===i);
+    const act = [...puzzle.children].map(t=>parseInt(t.dataset.real));
+    const ok  = act.every((v,i)=>v===i);
     if(ok){
+      clearInterval(timer);
       puzzle.querySelectorAll('.tile').forEach(t=>t.classList.add('correct'));
-      setTimeout(()=>document.getElementById('inputBox').style.display='block',500);
+      setTimeout(()=>document.getElementById('inputBox').style.display='block',400);
     }
   }
 
-  /* ----------  COMPROBAR PALABRA  ---------- */
+  /* ----------  COMPROBAR RESPUESTA  ---------- */
   function comprobar(){
     const val = document.getElementById('palabra').value.trim().toUpperCase();
-    const msg = document.getElementById('msg');
-    if(val===SOLUCIÓN){
-      msg.style.color='#4ef04e';
-      msg.textContent='¡Correcto! Pasando al siguiente nivel...';
-      setTimeout(()=>window.location.href='nivel4.html',1200);
+    if(val===RESPUESTA){
+      msg('es lo que intentan ganarse los groomers...','ok');
+      setTimeout(()=>window.location.href='nivel4.html',1000);
     }else{
-      msg.style.color='#ff4e4e';
-      msg.textContent='Palabra incorrecta, inténtalo de nuevo.';
+      msg('jaja casi pero no.','bad');
     }
+  }
+
+  /* ----------  HELPERS  ---------- */
+  function bloquear(){puzzle.style.pointerEvents='none';}
+  function msg(txt,tipo){
+    const m=document.getElementById('msg');
+    m.style.color=(tipo==='ok')?'var(--ok)':'var(--bad)';
+    m.textContent=txt;
   }
 </script>
 </body>
